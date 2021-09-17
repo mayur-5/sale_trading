@@ -1,0 +1,15 @@
+{
+    'name': 'Sale Trading',
+    'version': '1.0',
+    'category': 'Sale',
+    'summary': 'Sale Trading in Odoo',
+    'author': 'Planet-Odoo',
+	'license': 'AGPL-3',
+    'website': 'http://www.bassaminfotech.com',
+    'depends': ['web','sale','stock'],
+    'data': ['views/stock_picking_view.xml'],
+    'qweb': [],
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+}

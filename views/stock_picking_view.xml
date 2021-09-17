@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="stock_picking_view_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.view.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='location_id']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='pack_operation_pack_ids']/tree/field[@name='location_id']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/kanban" position="replace">
+                    <tree editable="bottom">
+                        <field name="product_id"/>
+                        <field name="location_id"/>
+                        <field name="availability" invisible="1"/>
+                        <field name="product_uom_qty" />
+                        <field name="product_uom" options="{'no_open': True, 'no_create': True}" />
+                        <field name="location_dest_id" invisible="1"/>
+                        <field name="scrapped" invisible="1"/>
+                        <field name="state"/>
+
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+    </data>
+    <!--      <field name="move_lines" attrs="{'readonly': [('state', 'in', ('cancel', 'partially_available', 'assigned', 'done'))]}" options="{'reload_on_button': True}" mode="tree,kanban" context="{'address_in_id': partner_id, 'form_view_ref':'stock.view_move_picking_form', 'tree_view_ref':'stock.view_move_picking_tree', 'default_picking_type_id': picking_type_id, 'default_location_id': location_id, 'default_location_dest_id': location_dest_id}">-->
+    <!--    <tree editable="bottom">-->
+    <!--        <field name="product_id"/>-->
+    <!--        <field name="state"/>-->
+
+    <!--    </tree>-->
+    <!--        </field>-->
+</odoo>
