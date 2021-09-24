@@ -40,6 +40,9 @@ class StockMove(models.Model):
                 to_assign[key] |= move
                 print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 move_to_confirm.write({'state': 'draft'})
+            # elif move.split_from.backorder_id:
+            #     print("backorder_idddddddd")
+            #     move_to_confirm.write({'state': 'draft'})
             else:
                 print("confirmeddddddddd")
                 move_to_confirm.write({'state': 'confirmed'})
@@ -136,19 +139,9 @@ class StockPicking(models.Model):
             raise UserError(_('Nothing to check the availability for.'))
         moves.action_assign()
         return True
-    # @api.multi
-    # def action_assign(self):
-    #     """ Check availability of picking moves.
-    #     This has the effect of changing the state and reserve quants on available moves, and may
-    #     also impact the state of the picking as it is computed based on move's states.
-    #     @return: True
-    #     """
-    #     self.filtered(lambda picking: picking.state == 'draft').action_confirm()
-    #     moves = self.mapped('move_lines').filtered(lambda move: move.state not in ('cancel', 'done'))
-    #     if not moves:
-    #         raise UserError(_('Nothing to check the availability for.'))
-    #     moves.action_assign()
-    #     return True
+
+
+
 
 class Quant(models.Model):
     """ Quants are the smallest unit of stock physical instances """
@@ -187,3 +180,24 @@ class Quant(models.Model):
             move.write({'state': 'draft'})
         elif float_compare(reserved_availability, 0, precision_rounding=rounding) > 0 and not move.partially_available:
             move.write({'partially_available': True})
+
+class StockImmediateTransfer(models.TransientModel):
+    _inherit = 'stock.immediate.transfer'
+    _description = 'Immediate Transfer'
+
+    # @api.multi
+    # def process(self):
+    #     self.ensure_one()
+    #     # If still in draft => confirm and assign
+    #     if self.pick_id.state == 'draft':
+    #         self.pick_id.action_confirm()
+    #         if self.pick_id.state != 'assigned':
+    #             self.pick_id.action_assign()
+    #             # if self.pick_id.state != 'assigned':
+    #             #     raise UserError(_("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+    #     for pack in self.pick_id.pack_operation_ids:
+    #         if pack.product_qty > 0:
+    #             pack.write({'qty_done': pack.product_qty})
+    #         else:
+    #             pack.unlink()
+    #     return self.pick_id.do_transfer()
